@@ -1,0 +1,110 @@
+[
+  {
+    "id_receta": 1,
+    "nombre": "Milanesa con puré",
+    "categoria": "plato principal",
+    "ingredientes": ["carne", "pan rallado", "huevo", "papa", "leche", "manteca", "ajo", "perejil", "sal"],
+    "dificultad": "media",
+    "valoracion": 8.9,
+    "tiempo_min": 45
+  },
+  {
+    "id_receta": 2,
+    "nombre": "Milanesa napolitana",
+    "categoria": "plato principal",
+    "ingredientes": ["carne", "pan rallado", "huevo", "queso", "tomate", "jamón", "ajo", "perejil", "sal"],
+    "dificultad": "media",
+    "valoracion": 9.0,
+    "tiempo_min": 50
+  },
+  {
+    "id_receta": 3,
+    "nombre": "Fideos con tuco",
+    "categoria": "plato principal",
+    "ingredientes": ["fideos", "tomate triturado", "carne picada", "cebolla", "ajo", "zanahoria", "aceite", "sal", "pimentón", "orégano"],
+    "dificultad": "baja",
+    "valoracion": 8.2,
+    "tiempo_min": 30
+  },
+  {
+    "id_receta": 4,
+    "nombre": "Ensalada César",
+    "categoria": "entrada",
+    "ingredientes": ["lechuga", "pollo", "pan tostado", "queso parmesano", "aderezo"],
+    "dificultad": "baja",
+    "valoracion": 7.8,
+    "tiempo_min": 20
+  },
+  {
+    "id_receta": 5,
+    "nombre": "Tortilla de papa",
+    "categoria": "plato principal",
+    "ingredientes": ["papa", "huevo", "cebolla", "aceite", "sal"],
+    "dificultad": "baja",
+    "valoracion": 8.5,
+    "tiempo_min": 40
+  },
+  {
+    "id_receta": 6,
+    "nombre": "Flan casero",
+    "categoria": "postre",
+    "ingredientes": ["huevo", "leche", "azúcar", "esencia de vainilla"],
+    "dificultad": "baja",
+    "valoracion": 9.2,
+    "tiempo_min": 60
+  },
+  {
+    "id_receta": 7,
+    "nombre": "Sopa de verduras",
+    "categoria": "entrada",
+    "ingredientes": ["zanahoria", "zapallo", "apio", "cebolla", "agua", "sal"],
+    "dificultad": "baja",
+    "valoracion": 7.5,
+    "tiempo_min": 35
+  },
+  {
+    "id_receta": 8,
+    "nombre": "Pizza casera",
+    "categoria": "plato principal",
+    "ingredientes": ["harina", "levadura", "agua", "tomate", "queso muzzarella", "orégano"],
+    "dificultad": "media",
+    "valoracion": 9.1,
+    "tiempo_min": 90
+  },
+  {
+    "id_receta": 9,
+    "nombre": "Guiso de lentejas",
+    "categoria": "plato principal",
+    "ingredientes": ["lentejas", "carne", "cebolla", "zanahoria", "papa", "caldo"],
+    "dificultad": "media",
+    "valoracion": 8.7,
+    "tiempo_min": 70
+  },
+  {
+    "id_receta": 10,
+    "nombre": "Brownie de chocolate",
+    "categoria": "postre",
+    "ingredientes": ["chocolate", "manteca", "azúcar", "huevo", "harina", "nueces"],
+    "dificultad": "media",
+    "valoracion": 9.4,
+    "tiempo_min": 40
+  },
+  {
+    "id_receta": 11,
+    "nombre": "Tarta de acelga",
+    "categoria": "plato principal",
+    "ingredientes": ["tapa de tarta", "acelga", "huevo", "queso cremoso", "cebolla"],
+    "dificultad": "baja",
+    "valoracion": 8.0,
+    "tiempo_min": 45
+  },
+  {
+    "id_receta": 12,
+    "nombre": "Limonada con menta",
+    "categoria": "bebida",
+    "ingredientes": ["limón", "agua", "azúcar", "menta", "hielo"],
+    "dificultad": "baja",
+    "valoracion": 8.6,
+    "tiempo_min": 10
+  }
+]
