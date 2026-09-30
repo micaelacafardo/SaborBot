@@ -4,6 +4,7 @@ from algoritmos.busqueda import (
     filtrar_por_categoria,
     filtrar_por_ingrediente
 )
+from estructuras.arbol import ArbolBST
 
 def _mostrar_detalle(resultados):
     if not resultados:
@@ -54,20 +55,41 @@ def _opcion_ingrediente(recetas):
     ing = input("\nIngrediente: ").strip()
     _mostrar_detalle(filtrar_por_ingrediente(recetas, ing))
 
+def _opcion_buscar_arbol(recetas, arbol):
+    """TP3: búsqueda EXACTA por nombre resuelta con el árbol binario."""
+    nombre = input("\nNombre EXACTO de la receta: ").strip()
+    receta = arbol.buscar(nombre)
+    if receta:
+        print(f"\n {receta.nombre.upper()}\n • Categoria: {receta.categoria}\n • Dificultad: {receta.dificultad}\n • Valoracion: {receta.valoracion}/10\n • Ingredientes: {', '.join(receta.ingredientes)}")
+    else:
+        print("\n No existe ninguna receta con ese nombre exacto. Probá la opción 1 (búsqueda parcial).")
+
+def _opcion_listar_arbol(recetas, arbol):
+    """TP3: listado alfabético vía recorrido inorder del árbol."""
+    print("\nRecetas en orden alfabético (recorrido inorder del árbol):")
+    _mostrar_detalle(arbol.inorder())
+
 
 # --- Menú interactivo mediante Dispatch Table (sin cadenas de if/elif) ---
 def ejecutar_terminal(recetas):
+    # TP3: se construye el árbol una sola vez al arrancar, a partir de
+    # las mismas recetas que usa el resto del sistema.
+    arbol = ArbolBST.construir_desde(recetas)
+
     opciones = {
-        "1": _opcion_buscar,
-        "2": _opcion_listar,
-        "3": _opcion_categoria,
-        "4": _opcion_ingrediente
+        "1": lambda: _opcion_buscar(recetas),
+        "2": lambda: _opcion_listar(recetas),
+        "3": lambda: _opcion_categoria(recetas),
+        "4": lambda: _opcion_ingrediente(recetas),
+        "5": lambda: _opcion_buscar_arbol(recetas, arbol),
+        "6": lambda: _opcion_listar_arbol(recetas, arbol),
     }
 
     while True:
         print("\n" + "="*35 + "\n    SABORBOT — TERMINAL\n" + "="*35)
-        print("1. Buscar receta\n2. Listar todas\n3. Filtrar por categoria\n4. Filtrar por ingrediente\n0. Salir")
-        
+        print("1. Buscar receta\n2. Listar todas\n3. Filtrar por categoria\n4. Filtrar por ingrediente")
+        print("5. Buscar receta exacta (árbol) 🌳\n6. Listar alfabéticamente (árbol) 🌳\n0. Salir")
+
         opc = input("Opción: ").strip()
         
         if opc == "0":
@@ -76,6 +98,6 @@ def ejecutar_terminal(recetas):
         
         accion = opciones.get(opc)
         if accion:
-            accion(recetas)
+            accion()
         else:
             print("\n Opción no válida.")

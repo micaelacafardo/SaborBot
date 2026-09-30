@@ -61,3 +61,20 @@ def filtrar_por_ingrediente(recetas, ingrediente):
         if ingrediente in [i.lower() for i in r.ingredientes]:
             resultados.append(r)
     return resultados
+
+
+# ==============================================================================
+# ESTRATEGIA C: Búsqueda secuencial EXACTA - TP3
+# ==============================================================================
+def buscar_exacta_secuencial(recetas, nombre):
+    """
+    Variante de buscar_por_nombre con coincidencia EXACTA (no parcial).
+    Se usa como punto de comparación "justo" contra ArbolBST.buscar()
+    (estructuras/arbol.py): mismo contrato (nombre exacto -> receta o None).
+    Complejidad: O(N) en el peor caso, igual que buscar_por_nombre.
+    """
+    nombre = nombre.strip().lower()
+    for r in recetas:
+        if r.nombre.lower() == nombre:
+            return r
+    return None
