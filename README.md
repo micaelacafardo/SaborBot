@@ -43,8 +43,10 @@ Muchas personas saben qué ingredientes tienen en casa o disfrutan de una receta
 
 ---
 
-##  4. Estructura del Repositorio
 
+## 4. Estructura del Repositorio
+
+```text
 SaborBot/
 ├── algoritmos/             # Módulos y estrategias de búsqueda y recorridos
 │   ├── bfs.py
@@ -53,7 +55,7 @@ SaborBot/
 │   └── dfs.py
 │   
 ├── datos/                  # Gestión e ingesta de datos
-│   ├── cargador.py         # Módulo de carga y conversión de JSON a objetos 
+│   ├── cargador.py         # Módulo de carga y conversión de JSON a objetos Receta
 │   └── recetas.json        # Base de datos de prueba
 ├── docs/                   # Documentación técnica y académica del proyecto
 │   ├── capturas/
@@ -64,8 +66,8 @@ SaborBot/
 │   ├── 05-gestion-proyecto.md
 │   └── 06-analisis-complejidad.md  # Informe de TP2
 ├── estructuras/            # Implementación propia de estructuras de datos
-│   ├── arbol.py            # Árbol Binario de Búsqueda (ABB) — implementado en TP3
-│   ├── avl.py              # Árbol AVL Auto-balanceado — TP4
+│   ├── arbol.py            # Árbol Binario de Búsqueda (ABB) — TP3
+│   ├── arbol_avl.py        # Árbol AVL Auto-balanceado — TP4
 │   ├── grafo.py            # Grafo para relaciones entre recetas
 │   └── heap.py             # Max/Min Heap para rankings
 ├── modelos/                # Modelos de dominio (POO)
