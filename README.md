@@ -36,7 +36,7 @@ Muchas personas saben qué ingredientes tienen en casa o disfrutan de una receta
 | **TP1** | POO, Encapsulamiento y Carga Dinámica desde JSON | 🟢 Completado |
 | **TP2** | Análisis de Algoritmos: Búsqueda O(N) vs O(log N) y Benchmarking | 🟢 Completado |
 | **TP3** | Árboles Binarios de Búsqueda (ABB) | 🟢 Completado |
-| **TP4** | Balanceo de Árboles (AVL) | 🔴 Pendiente |
+| **TP4** | Balanceo de Árboles (AVL) | 🟢 Completado  |
 | **TP5** | Heaps y Colas de Prioridad (Ranking Top-N) | 🔴 Pendiente |
 | **TP6** | Tablas Hash | 🔴 Pendiente |
 | **TP7** | Grafos y Recomendaciones Complejas por Ingredientes | 🔴 Pendiente |
@@ -65,7 +65,7 @@ SaborBot/
 │   └── 06-analisis-complejidad.md  # Informe de TP2
 ├── estructuras/            # Implementación propia de estructuras de datos
 │   ├── arbol.py            # Árbol Binario de Búsqueda (ABB) — implementado en TP3
-│   ├── avl.py              # Árbol AVL
+│   ├── avl.py              # Árbol AVL Auto-balanceado — TP4
 │   ├── grafo.py            # Grafo para relaciones entre recetas
 │   └── heap.py             # Max/Min Heap para rankings
 ├── modelos/                # Modelos de dominio (POO)
@@ -76,11 +76,13 @@ SaborBot/
 ├── telegram/               # Integración con Bot de Telegram
 │   └── bot.py
 ├── tests/                  # Pruebas unitarias
-│   └── test_arbol.py       # 11 tests del ArbolBST (TP3)
+│   ├── test_arbol.py       # Tests del ArbolBST (TP3)
+│   └── test_avl.py         # Tests del ArbolAVL (TP4)
 ├── ui/                     # Interfaz de usuario
 │   └── terminal.py         # Menú interactivo CLI con Dispatch Table
 ├── experimento.py          # Script de benchmarking (TP2)
 ├── experimento_arbol.py    # Script de benchmarking: secuencial vs. árbol (TP3)
+├── experimento_avl.py      # Script de benchmarking: desbalance BST vs. AVL (TP4)
 ├── main.py                 # Punto de entrada de la aplicación
 └── README.md               # Documentación principal
 
@@ -125,26 +127,52 @@ Comparamos **Búsqueda Secuencial O(N)** vs. **Árbol O(log N)** sobre datasets 
 
 ---
 
-##  7. Cómo Ejecutar el Proyecto
 
-### Desde el Editor (VS Code / IDE)
-1. Abrir el proyecto en tu editor.
-2. Abrir el archivo `main.py` para la aplicación principal, `experimento.py` para las pruebas de tiempo del TP2, o `experimento_arbol.py` para las del TP3.
-3. Ejecutar haciendo clic en el botón de **Play (▶️)** en la esquina superior derecha.
+## 7. Balanceo de Árboles con AVL (TP4)
 
-### Desde la Consola
-- **Menú Interactivo:** `python main.py`
-- **Benchmarking TP2:** `python experimento.py`
-- **Benchmarking TP3 (árbol):** `python experimento_arbol.py`
-- **Tests del árbol:** `python -m unittest tests.test_arbol -v`
+En el **TP4** investigamos la fragilidad del BST común ante datos en peor caso (por ejemplo, inserción de recetas en orden alfabético estricto). En ese escenario, un BST sin balancear pierde su estructura jerárquica y **degenera en una lista enlazada**, disparando su altura a $h = N$ y convirtiendo la búsqueda en una operación lineal $O(N)$.
+
+Para resolver esta degradación, implementamos un **Árbol AVL (Adelson-Velsky y Landis)** en `estructuras/arbol_avl.py`. La estructura evalúa el **factor de balance** ($h_{izquierda} - h_{derecha}$) de cada nodo y ejecuta auto-balanceo mediante **4 tipos de rotaciones**:
+
+1. **Rotación Simple Derecha** (Desbalance Izquierda - Izquierda)
+2. **Rotación Simple Izquierda** (Desbalance Derecha - Derecha)
+3. **Doble Rotación Izquierda-Derecha**
+4. **Doble Rotación Derecha-Izquierda**
+
+### Resultados del Experimento de Desbalance (`experimento_avl.py`)
+
+Forzamos la inserción de recetas en orden alfabético estricto leyendo desde el cargador de datos `datos/cargador.py`:
+
+- **BST Común (Degenerado):** Altura = $N$ | Complejidad de Búsqueda = $O(N)$ (Comportamiento de Lista).
+- **Árbol AVL (Auto-balanceado):** Altura = $h \le 1.44 \log_2 N$ | Complejidad de Búsqueda = $O(\log N)$ garantizado.
+
+**Conclusión Técnica:** Mientras que un BST no balanceado con $10.000$ recetas ordenadas genera una altura de $10.000$ niveles, el **Árbol AVL acorta la altura a solo 14 niveles**, asegurando tiempos de respuesta constantes y eficientes sin importar el orden de ingreso de los datos.
+
+**Pruebas Unitarias:** `tests/test_avl.py` valida las rotaciones automáticas ante inserciones ordenadas, la búsqueda exacta (*case-insensitive*) y el recorrido inorder.
 
 ---
 
-##  8. Modelo de Usuario (modelos/usuario.py)
+
+## 8. Cómo Ejecutar el Proyecto
+
+### Desde el Editor (VS Code / IDE)
+1. Abrir el proyecto en tu editor de código.
+2. Abrir el archivo ejecutable que desees probar:
+   - `main.py` para la aplicación interactiva principal.
+   - `experimento.py` para las pruebas de tiempo de Búsqueda Secuencial vs. Binaria (TP2).
+   - `experimento_arbol.py` para las pruebas de Búsqueda Secuencial vs. ABB (TP3).
+   - `experimento_avl.py` para las pruebas de BST Desbalanceado vs. Árbol AVL (TP4).
+3. Ejecutar haciendo clic en el botón de **Play (▶️)** en la esquina superior derecha.
+
+
+---
+
+
+##  9. Modelo de Usuario (modelos/usuario.py)
 
 Para gestionar perfiles y preparar la integración con los algoritmos de recomendación en las siguientes entregas, se implementó el modelo `Usuario` con encapsulamiento estricto y soporte para conjuntos de ingredientes. Contempla la gestión de nombre, email, conjunto de ingredientes disponibles, categorías favoritas e historial de navegación.
 
 ---
 
-##  9. Licencia y Uso
+##  10. Licencia y Uso
 Proyecto desarrollado con fines académicos para la materia **Estructuras de Datos** (Universidad Nacional Guillermo Brown).
