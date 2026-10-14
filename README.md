@@ -88,6 +88,7 @@ SaborBot/
 ├── main.py                 # Punto de entrada de la aplicación
 └── README.md               # Documentación principal
 
+```
 ---
 
 ##  5. Resultados del Experimento de Complejidad (TP2)
