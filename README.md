@@ -37,7 +37,7 @@ Muchas personas saben qué ingredientes tienen en casa o disfrutan de una receta
 | **TP2** | Análisis de Algoritmos: Búsqueda O(N) vs O(log N) y Benchmarking | 🟢 Completado |
 | **TP3** | Árboles Binarios de Búsqueda (ABB) | 🟢 Completado |
 | **TP4** | Balanceo de Árboles (AVL) | 🟢 Completado  |
-| **TP5** | Heaps y Colas de Prioridad (Ranking Top-N) | 🔴 Pendiente |
+| **TP5** | Heaps y Colas de Prioridad (Ranking Top-N) | 🟢 Completado |
 | **TP6** | Tablas Hash | 🔴 Pendiente |
 | **TP7** | Grafos y Recomendaciones Complejas por Ingredientes | 🔴 Pendiente |
 
@@ -68,6 +68,7 @@ SaborBot/
 ├── estructuras/            # Implementación propia de estructuras de datos
 │   ├── arbol.py            # Árbol Binario de Búsqueda (ABB) — TP3
 │   ├── arbol_avl.py        # Árbol AVL Auto-balanceado — TP4
+│   ├── arbol_n_ario.py     # Árbol General (N-ario) de Categorías — TP5
 │   ├── grafo.py            # Grafo para relaciones entre recetas
 │   └── heap.py             # Max/Min Heap para rankings
 ├── modelos/                # Modelos de dominio (POO)
@@ -79,7 +80,8 @@ SaborBot/
 │   └── bot.py
 ├── tests/                  # Pruebas unitarias
 │   ├── test_arbol.py       # Tests del ArbolBST (TP3)
-│   └── test_avl.py         # Tests del ArbolAVL (TP4)
+│   ├── test_avl.py         # Tests del ArbolAVL (TP4)
+│   └── test_arbol_n_ario.py # Tests del Árbol N-ario (TP5)
 ├── ui/                     # Interfaz de usuario
 │   └── terminal.py         # Menú interactivo CLI con Dispatch Table
 ├── experimento.py          # Script de benchmarking (TP2)
@@ -154,9 +156,21 @@ Forzamos la inserción de recetas en orden alfabético estricto leyendo desde el
 **Pruebas Unitarias:** `tests/test_avl.py` valida las rotaciones automáticas ante inserciones ordenadas, la búsqueda exacta (*case-insensitive*) y el recorrido inorder.
 
 ---
+## 8. Árboles Generales (N-arios) y Jerarquía de Dominio (TP5)
 
+En el **TP5** incorporamos un **Árbol General (N-ario)** (`estructuras/arbol_n_ario.py`) para representar la jerarquía natural del dominio gastronómico de SaborBot (categorías principales, tipos de platos y subtipos).
 
-## 8. Cómo Ejecutar el Proyecto
+###  Características Implementadas
+- **Nodos N-arios:** Cada nodo almacena un valor de texto y una lista dinámica de hijos (`hijos: List[NodoNArio]`), permitiendo una profundidad ilimitada.
+- **Recorridos y Búsqueda:** Implementación propia de búsqueda recursiva de nodos y recorrido en **Preorden**.
+- **Visualización en Consola:** Método de impresión estructurado que dibuja las ramas de forma idéntica a un árbol de directorios (*ej. `├── Platos Principales`*).
+- **Integración CLI:** Funcionalidad accesible desde el menú interactivo bajo la opción de *"Explorar categorías jerárquicamente"* (`ui/terminal.py`).
+
+**Pruebas Unitarias:** `tests/test_arbol_n_ario.py` valida la correcta búsqueda de nodos existentes/inexistentes y el orden del recorrido preorden.
+
+---
+
+## 9. Cómo Ejecutar el Proyecto
 
 ### Desde el Editor (VS Code / IDE)
 1. Abrir el proyecto en tu editor de código.
@@ -171,11 +185,11 @@ Forzamos la inserción de recetas en orden alfabético estricto leyendo desde el
 ---
 
 
-##  9. Modelo de Usuario (modelos/usuario.py)
+##  10. Modelo de Usuario (modelos/usuario.py)
 
 Para gestionar perfiles y preparar la integración con los algoritmos de recomendación en las siguientes entregas, se implementó el modelo `Usuario` con encapsulamiento estricto y soporte para conjuntos de ingredientes. Contempla la gestión de nombre, email, conjunto de ingredientes disponibles, categorías favoritas e historial de navegación.
 
 ---
 
-##  10. Licencia y Uso
+##  11. Licencia y Uso
 Proyecto desarrollado con fines académicos para la materia **Estructuras de Datos** (Universidad Nacional Guillermo Brown).
