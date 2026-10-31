@@ -6,6 +6,7 @@ from algoritmos.busqueda import (
 )
 from estructuras.arbol import ArbolBST
 from estructuras.arbol_n_ario import ArbolNArio, NodoNArio
+from servicios.ranking import mostrar_top
 
 def _mostrar_detalle(resultados):
     if not resultados:
@@ -16,6 +17,11 @@ def _mostrar_detalle(resultados):
     for idx, r in enumerate(resultados, 1):
         print(f"{idx}. {r.nombre} ({r.categoria}) - ⭐ {r.valoracion}")
 
+    _pedir_detalle(resultados)
+
+
+def _pedir_detalle(resultados):
+    """Pregunta qué receta de la lista se quiere ver en detalle."""
     sel = input("\nVer detalle (número, Enter para omitir): ").strip()
     if sel.isdigit() and 1 <= int(sel) <= len(resultados):
         r = resultados[int(sel) - 1]
@@ -70,6 +76,37 @@ def _opcion_listar_arbol(recetas, arbol):
     print("\nRecetas en orden alfabético (recorrido inorder del árbol):")
     _mostrar_detalle(arbol.inorder())
 
+def _opcion_top_n(recetas):
+    """TP6: ranking Top-N resuelto con un heap (servicios/ranking.py)."""
+    n_txt = input("\n¿Cuántas recetas querés ver? (Enter = 10): ").strip()
+    if n_txt == "":
+        n = 10
+    elif n_txt.isdigit() and int(n_txt) > 0:
+        n = int(n_txt)
+    else:
+        print("\n Ingresá un número entero mayor que 0.")
+        return
+
+    categorias = sorted(set(r.categoria for r in recetas))
+    print("\nFiltrar por categoría:")
+    print("0. Todas")
+    for idx, cat in enumerate(categorias, 1):
+        print(f"{idx}. {cat.title()}")
+
+    opc = input("\nOpción (Enter = Todas): ").strip()
+    if opc in ("", "0"):
+        categoria = None
+    elif opc.isdigit() and 1 <= int(opc) <= len(categorias):
+        categoria = categorias[int(opc) - 1]
+    else:
+        print("\n Opción no válida.")
+        return
+
+    top = mostrar_top(recetas, n, categoria)
+    if top:
+        _pedir_detalle(top)
+
+
 def _opcion_explorar_categorias(arbol_n):
     """TP5: Explorar la jerarquía de categorías con el Árbol N-ario."""
     print("\n" + "=" * 50)
@@ -105,6 +142,7 @@ def ejecutar_terminal(recetas):
         "5": lambda: _opcion_buscar_arbol(recetas, arbol_bst),
         "6": lambda: _opcion_listar_arbol(recetas, arbol_bst),
         "7": lambda: _opcion_explorar_categorias(arbol_n),
+        "8": lambda: _opcion_top_n(recetas),
     }
 
     while True:
@@ -116,6 +154,7 @@ def ejecutar_terminal(recetas):
         print("5. Buscar receta exacta (Árbol BST) ")
         print("6. Listar alfabéticamente (Árbol BST) ")
         print("7. Explorar categorías jerárquicamente (Árbol N-ario) ")
+        print("8. Ver Top-N de recetas (Heap) ")
         print("0. Salir")
 
         opc = input("\nOpción: ").strip()

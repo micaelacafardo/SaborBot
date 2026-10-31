@@ -9,7 +9,7 @@
 
 ---
 
-##  1. Descripción General y Dominio
+## 1. Descripción General y Dominio
 
 **SaborBot** es un sistema inteligente de recomendación de recetas de cocina desarrollado en Python. Elegimos el dominio de la **gastronomía** porque ofrece relaciones complejas e interconexiones naturales que permiten aplicar de manera progresiva las estructuras de datos fundamentales de la materia:
 
@@ -19,16 +19,16 @@
 
 ---
 
-##  2. Problema que Resuelve y Usuario Objetivo
+## 2. Problema que Resuelve y Usuario Objetivo
 
-Muchas personas saben qué ingredientes tienen en casa o disfrutan de una receta en particular, pero no reconocen qué otros platillos similares pueden cocinar aprovechando lo que ya tienen a mano.
+Muchas personas saben qué ingredientes tienen en casa o disfrutan de una receta en particular, pero no reconocen qué otros platos similares pueden cocinar aprovechando lo que ya tienen a mano.
 
 ### Perfil de Usuario
 > **Martina (24 años):** Cocina para ella y su pareja entre semana. Cuenta con tiempo limitado y busca variar el menú semanal sin necesidad de realizar compras adicionales constantes. Requiere una herramienta simple y rápida que le brinde sugerencias concretas a partir de sus ingredientes o preferencias.
 
 ---
 
-##  3. Estado de Avance por Trabajos Prácticos
+## 3. Estado de Avance por Trabajos Prácticos
 
 | TP | Tema Principal | Estado |
 | :--- | :--- | :---: |
@@ -36,13 +36,15 @@ Muchas personas saben qué ingredientes tienen en casa o disfrutan de una receta
 | **TP1** | POO, Encapsulamiento y Carga Dinámica desde JSON | 🟢 Completado |
 | **TP2** | Análisis de Algoritmos: Búsqueda O(N) vs O(log N) y Benchmarking | 🟢 Completado |
 | **TP3** | Árboles Binarios de Búsqueda (ABB) | 🟢 Completado |
-| **TP4** | Balanceo de Árboles (AVL) | 🟢 Completado  |
-| **TP5** | Heaps y Colas de Prioridad (Ranking Top-N) | 🟢 Completado |
-| **TP6** | Tablas Hash | 🔴 Pendiente |
-| **TP7** | Grafos y Recomendaciones Complejas por Ingredientes | 🔴 Pendiente |
+| **TP4** | Balanceo de Árboles (AVL) | 🟢 Completado |
+| **TP5** | Árboles Generales (N-arios) y Jerarquía de Categorías | 🟢 Completado |
+| **TP6** | Heap y Colas de Prioridad (Ranking Top-N) | 🟢 Completado |
+| **TP7** | Grafos y Relaciones por Ingredientes | 🔴 Pendiente |
+| **TP8** | Recorridos de Grafos (BFS / DFS) | 🔴 Pendiente |
+| **TP9** | Caminos Mínimos | 🔴 Pendiente |
+| **TP10** | Integración y Demo Day | 🔴 Pendiente |
 
 ---
-
 
 ## 4. Estructura del Repositorio
 
@@ -53,7 +55,7 @@ SaborBot/
 │   ├── busqueda.py         # Búsqueda secuencial O(N), binaria O(log N) y secuencial exacta (TP3)
 │   ├── caminos.py
 │   └── dfs.py
-│   
+│
 ├── datos/                  # Gestión e ingesta de datos
 │   ├── cargador.py         # Módulo de carga y conversión de JSON a objetos Receta
 │   └── recetas.json        # Base de datos de prueba
@@ -64,36 +66,40 @@ SaborBot/
 │   ├── 03-diagrama-clases.md
 │   ├── 04-diagrama-datos.md
 │   ├── 05-gestion-proyecto.md
-│   └── 06-analisis-complejidad.md  # Informe de TP2
+│   ├── 06-analisis-complejidad.md  # Informe de TP2
+│   └── 07_heap_ranking.md          # Informe de TP6
 ├── estructuras/            # Implementación propia de estructuras de datos
 │   ├── arbol.py            # Árbol Binario de Búsqueda (ABB) — TP3
 │   ├── arbol_avl.py        # Árbol AVL Auto-balanceado — TP4
 │   ├── arbol_n_ario.py     # Árbol General (N-ario) de Categorías — TP5
 │   ├── grafo.py            # Grafo para relaciones entre recetas
-│   └── heap.py             # Max/Min Heap para rankings
+│   └── heap.py             # Heap binaria (Max/Min) implementada a mano — TP6
 ├── modelos/                # Modelos de dominio (POO)
 │   ├── receta.py           # Clase Receta
 │   └── usuario.py          # Clase Usuario
 ├── servicios/              # Lógica de negocio y motor de recomendaciones
+│   ├── ranking.py          # Función de prioridad y Top-N con heap — TP6
 │   └── recomendador.py
 ├── telegram/               # Integración con Bot de Telegram
 │   └── bot.py
 ├── tests/                  # Pruebas unitarias
 │   ├── test_arbol.py       # Tests del ArbolBST (TP3)
 │   ├── test_avl.py         # Tests del ArbolAVL (TP4)
-│   └── test_arbol_n_ario.py # Tests del Árbol N-ario (TP5)
+│   ├── test_arbol_n_ario.py # Tests del Árbol N-ario (TP5)
+│   └── test_heap.py        # Tests del Heap y del ranking (TP6)
 ├── ui/                     # Interfaz de usuario
 │   └── terminal.py         # Menú interactivo CLI con Dispatch Table
 ├── experimento.py          # Script de benchmarking (TP2)
 ├── experimento_arbol.py    # Script de benchmarking: secuencial vs. árbol (TP3)
 ├── experimento_avl.py      # Script de benchmarking: desbalance BST vs. AVL (TP4)
+├── experimento_heap.py     # Script de benchmarking: Top-N con heap vs. ordenar todo (TP6)
 ├── main.py                 # Punto de entrada de la aplicación
 └── README.md               # Documentación principal
-
 ```
+
 ---
 
-##  5. Resultados del Experimento de Complejidad (TP2)
+## 5. Resultados del Experimento de Complejidad (TP2)
 
 En el **TP2** evaluamos el rendimiento empírico de la **Búsqueda Secuencial O(N)** frente a la **Búsqueda Binaria O(log N)** utilizando `time.perf_counter()` sobre datasets sintéticos de hasta 100.000 recetas:
 
@@ -106,7 +112,7 @@ En el **TP2** evaluamos el rendimiento empírico de la **Búsqueda Secuencial O(
 
 ---
 
-##  6. Árbol Binario de Búsqueda y Comparación de Estrategias (TP3)
+## 6. Árbol Binario de Búsqueda y Comparación de Estrategias (TP3)
 
 En el **TP3** se incorporó un **Árbol Binario de Búsqueda (ABB)** (`estructuras/arbol.py`), ordenado por el nombre de la receta, integrado a dos funcionalidades reales del menú interactivo:
 
@@ -132,7 +138,6 @@ Comparamos **Búsqueda Secuencial O(N)** vs. **Árbol O(log N)** sobre datasets 
 
 ---
 
-
 ## 7. Balanceo de Árboles con AVL (TP4)
 
 En el **TP4** investigamos la fragilidad del BST común ante datos en peor caso (por ejemplo, inserción de recetas en orden alfabético estricto). En ese escenario, un BST sin balancear pierde su estructura jerárquica y **degenera en una lista enlazada**, disparando su altura a $h = N$ y convirtiendo la búsqueda en una operación lineal $O(N)$.
@@ -156,11 +161,12 @@ Forzamos la inserción de recetas en orden alfabético estricto leyendo desde el
 **Pruebas Unitarias:** `tests/test_avl.py` valida las rotaciones automáticas ante inserciones ordenadas, la búsqueda exacta (*case-insensitive*) y el recorrido inorder.
 
 ---
+
 ## 8. Árboles Generales (N-arios) y Jerarquía de Dominio (TP5)
 
 En el **TP5** incorporamos un **Árbol General (N-ario)** (`estructuras/arbol_n_ario.py`) para representar la jerarquía natural del dominio gastronómico de SaborBot (categorías principales, tipos de platos y subtipos).
 
-###  Características Implementadas
+### Características Implementadas
 - **Nodos N-arios:** Cada nodo almacena un valor de texto y una lista dinámica de hijos (`hijos: List[NodoNArio]`), permitiendo una profundidad ilimitada.
 - **Recorridos y Búsqueda:** Implementación propia de búsqueda recursiva de nodos y recorrido en **Preorden**.
 - **Visualización en Consola:** Método de impresión estructurado que dibuja las ramas de forma idéntica a un árbol de directorios (*ej. `├── Platos Principales`*).
@@ -170,7 +176,59 @@ En el **TP5** incorporamos un **Árbol General (N-ario)** (`estructuras/arbol_n_
 
 ---
 
-## 9. Cómo Ejecutar el Proyecto
+## 9. Heap y Ranking Top-N de Recetas (TP6)
+
+En el **TP6** incorporamos una **Heap binaria** (`estructuras/heap.py`), implementada a mano sobre una lista (sin usar `heapq`), para construir un **ranking dinámico de recetas** (`servicios/ranking.py`). El usuario puede pedir el Top-N general o filtrado por categoría desde el menú interactivo.
+
+### Función de prioridad
+
+No ordenamos solo por valoración: una receta muy bien puntuada pero difícil y larga no es la mejor sugerencia para alguien con poco tiempo, como Martina, nuestra usuaria objetivo. Por eso definimos:
+
+```text
+puntaje = valoracion − 0.3 × nivel_dificultad − 0.5 × (tiempo_min / 60)
+```
+
+donde `nivel_dificultad` vale 0 (baja), 1 (media) o 2 (alta). Los pesos (`PESO_DIFICULTAD`, `PESO_TIEMPO`) son constantes ajustables en `servicios/ranking.py`.
+
+### Características Implementadas
+- **Heap binaria propia:** arreglo donde el padre de la posición `i` es `(i-1)//2` y sus hijos son `2i+1` y `2i+2`. Soporta modo Max y Min mediante una función `clave`.
+- **Operaciones:** `insertar`, `extraer`, `ver_raiz`, `reemplazar_raiz` y construcción por *heapify* (`desde_lista`).
+- **Top-N con min-heap de tamaño N:** la raíz es la peor de las N mejores recetas vistas hasta el momento; cada receta nueva solo entra al heap si supera a la raíz.
+- **Filtro por categoría** y compatibilidad con recetas como objetos o como diccionarios del JSON.
+- **Integración CLI:** **Opción 8 — Ver Top-N de recetas (Heap)** en el menú interactivo (`ui/terminal.py`): permite elegir cuántas recetas ver y filtrar por categoría.
+
+### Complejidad
+
+| Operación | Costo |
+| :--- | :---: |
+| `insertar`, `extraer`, `reemplazar_raiz` | O(log n) |
+| `ver_raiz` | O(1) |
+| Construcción por heapify (`desde_lista`) | O(n) |
+| Top-N con heap de tamaño N sobre m recetas | O(m log N) tiempo, O(N) memoria |
+| Top-N ordenando todo | O(m log m) tiempo, O(m) memoria |
+
+### ¿Por qué un heap y no ordenar todo el dataset?
+Para un ranking solo interesan las N mejores recetas (N chico, por ejemplo 10) entre m recetas. El heap mantiene únicamente N elementos y evita ordenar las m. Además, permite actualizar el ranking al agregar recetas nuevas sin reordenar toda la colección.
+
+### Resultados del experimento (`experimento_heap.py`)
+
+Comparamos **Top-10 con heap** vs. **ordenar todo con `sorted()` y quedarse con 10** sobre datasets sintéticos:
+
+| N recetas | Heap Top-10 | Ordenar todo |
+| :--- | :---: | :---: |
+| 1.000 | 0.54 ms | 0.37 ms |
+| 10.000 | 4.91 ms | 4.59 ms |
+| 100.000 | 47.61 ms | 61.75 ms |
+
+**Conclusión:** con pocos datos, `sorted()` es igual o más rápido porque está implementado en C, mientras que nuestro heap está escrito en Python. A medida que el volumen crece, el heap gana gracias a su complejidad O(m log N) y a su menor uso de memoria. La ventaja del heap es asintótica, no constante.
+
+**Pruebas:** `tests/test_heap.py` cubre extracción en orden, modo min-heap, heapify, heap vacío, `ver_raiz`, el Top-N (orden, N mayor que la cantidad de recetas, filtro por categoría) y la penalización por dificultad — 9 tests, todos en verde.
+
+Más detalle en [`docs/07_heap_ranking.md`](docs/07_heap_ranking.md).
+
+---
+
+## 10. Cómo Ejecutar el Proyecto
 
 ### Desde el Editor (VS Code / IDE)
 1. Abrir el proyecto en tu editor de código.
@@ -179,17 +237,26 @@ En el **TP5** incorporamos un **Árbol General (N-ario)** (`estructuras/arbol_n_
    - `experimento.py` para las pruebas de tiempo de Búsqueda Secuencial vs. Binaria (TP2).
    - `experimento_arbol.py` para las pruebas de Búsqueda Secuencial vs. ABB (TP3).
    - `experimento_avl.py` para las pruebas de BST Desbalanceado vs. Árbol AVL (TP4).
+   - `experimento_heap.py` para las pruebas de Top-N con Heap vs. ordenar todo (TP6).
 3. Ejecutar haciendo clic en el botón de **Play (▶️)** en la esquina superior derecha.
 
+### Desde la Terminal
+Parado en la carpeta raíz del proyecto:
+
+```bash
+python main.py                                  # aplicación interactiva
+python experimento_heap.py                      # benchmark del TP6
+python -m unittest discover -s tests -v         # todas las pruebas unitarias
+```
 
 ---
 
-
-##  10. Modelo de Usuario (modelos/usuario.py)
+## 11. Modelo de Usuario (`modelos/usuario.py`)
 
 Para gestionar perfiles y preparar la integración con los algoritmos de recomendación en las siguientes entregas, se implementó el modelo `Usuario` con encapsulamiento estricto y soporte para conjuntos de ingredientes. Contempla la gestión de nombre, email, conjunto de ingredientes disponibles, categorías favoritas e historial de navegación.
 
 ---
 
-##  11. Licencia y Uso
+## 12. Licencia y Uso
+
 Proyecto desarrollado con fines académicos para la materia **Estructuras de Datos** (Universidad Nacional Guillermo Brown).
