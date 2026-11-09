@@ -40,7 +40,7 @@ Muchas personas saben qué ingredientes tienen en casa o disfrutan de una receta
 | **TP5** | Árboles Generales (N-arios) y Jerarquía de Categorías | 🟢 Completado |
 | **TP6** | Heap y Colas de Prioridad (Ranking Top-N) | 🟢 Completado |
 | **TP7** | Grafos y Relaciones por Ingredientes | 🟢 Completado |
-| **TP8** | Recorridos de Grafos (BFS / DFS) | 🔴 Pendiente |
+| **TP8** | Recorridos de Grafos (BFS / DFS) | 🟢 Completado |
 | **TP9** | Caminos Mínimos | 🔴 Pendiente |
 | **TP10** | Integración y Demo Day | 🔴 Pendiente |
 
