@@ -50,47 +50,55 @@ Muchas personas saben qué ingredientes tienen en casa o disfrutan de una receta
 
 ```text
 SaborBot/
-├── algoritmos/             # Módulos y estrategias de búsqueda y recorridos
-│   ├── bfs.py
-│   ├── busqueda.py         # Búsqueda secuencial O(N), binaria O(log N) y secuencial exacta (TP3)
-│   ├── caminos.py
-│   └── dfs.py
-│
+├── algoritmos/             # Algoritmos de ordenamiento, búsqueda y grafos
+│   ├── busqueda.py         # Búsqueda secuencial, binaria y exacta (TP3)
+│   ├── bfs.py              # Recorrido en Anchura (BFS) y distancias (TP8)
+│   ├── caminos.py          # Caminos mínimos (Espacio para TP9)
+│   └── dfs.py              # Recorrido en Profundidad (DFS) (TP8)
+│   
 ├── datos/                  # Gestión e ingesta de datos
 │   ├── cargador.py         # Módulo de carga y conversión de JSON a objetos Receta
 │   └── recetas.json        # Base de datos de prueba
-├── docs/                   # Documentación técnica y académica del proyecto
-│   ├── capturas/
-│   ├── 01-requerimientos.md
-│   ├── 02-casos-de-uso.md
+│   
+├── docs/                   # Documentación técnica e informes
+│   ├── 01-propuesta-dominio.md
+│   ├── 02-casos-uso.md
 │   ├── 03-diagrama-clases.md
 │   ├── 04-diagrama-datos.md
 │   ├── 05-gestion-proyecto.md
 │   ├── 06-analisis-complejidad.md  # Informe de TP2
 │   └── 07_heap_ranking.md          # Informe de TP6
+│   
 ├── estructuras/            # Implementación propia de estructuras de datos
 │   ├── arbol.py            # Árbol Binario de Búsqueda (ABB) — TP3
 │   ├── arbol_avl.py        # Árbol AVL Auto-balanceado — TP4
 │   ├── arbol_n_ario.py     # Árbol General (N-ario) de Categorías — TP5
-│   ├── grafo.py            # Grafo No Dirigido y Pesado (Lista de Adyacencia) — TP7
-│   └── heap.py             # Heap binaria (Max/Min) implementada a mano — TP6
+│   ├── heap.py             # Heap binaria (Max/Min) implementada a mano — TP6
+│   └── grafo.py            # Grafo No Dirigido y Pesado (Lista de Adyacencia) — TP7
+│   
 ├── modelos/                # Modelos de dominio (POO)
 │   ├── receta.py           # Clase Receta
 │   └── usuario.py          # Clase Usuario
+│   
 ├── servicios/              # Lógica de negocio y motor de recomendaciones
 │   ├── ranking.py          # Función de prioridad y Top-N con heap — TP6
-│   └── recomendador_grafos.py # Motor de recomendaciones por ingredientes — TP7
+│   ├── recomendador_grafos.py # Motor de recomendaciones por ingredientes — TP7
+│   └── recorridos_grafos.py   # Servicio de consultas BFS y DFS — TP8
+│   
 ├── telegram/               # Integración con Bot de Telegram
 │   └── bot.py
+│   
 ├── tests/                  # Pruebas unitarias
 │   ├── test_arbol.py       # Tests del ArbolBST (TP3)
 │   ├── test_avl.py         # Tests del ArbolAVL (TP4)
 │   ├── test_arbol_n_ario.py # Tests del Árbol N-ario (TP5)
 │   ├── test_heap.py        # Tests del Heap y del ranking (TP6)
-│   └── test_grafo.py       # Tests del Grafo y recomendaciones (TP7)
-
+│   ├── test_grafo.py       # Tests del Grafo y recomendaciones (TP7)
+│   └── test_recorridos.py  # Tests de BFS y DFS (TP8)
+│   
 ├── ui/                     # Interfaz de usuario
-│   └── terminal.py         # Menú interactivo CLI con Dispatch Table
+│   └── terminal.py         # Menú interactivo CLI con Dispatch Table (Opciones 1 a 10)
+│   
 ├── experimento.py          # Script de benchmarking (TP2)
 ├── experimento_arbol.py    # Script de benchmarking: secuencial vs. árbol (TP3)
 ├── experimento_avl.py      # Script de benchmarking: desbalance BST vs. AVL (TP4)
@@ -251,8 +259,28 @@ Se implementó un motor de recomendación que:
 
 ---
 
+## 11. Recorridos de Grafos: BFS y DFS (TP8)
 
-## 11. Cómo Ejecutar el Proyecto
+En el **TP8** incorporamos los algoritmos fundamentales de exploración sobre la red de recetas de SaborBot, ubicados en la carpeta `algoritmos/`:
+
+### Algoritmos Implementados
+- **BFS (Breadth-First Search - `algoritmos/bfs.py`):** 
+  - **Qué hace:** Explora el grafo por niveles (en olas), visitando primero a los vecinos directos y luego a los de mayor distancia.
+  - **Consulta real en SaborBot:** *"¿Qué recetas están a 1 o 2 saltos de ingredientes?"* (útil para encontrar sustitutos cercanos o variantes directas).
+  - **Ventaja:** Garantiza encontrar el camino mínimo en cantidad de aristas.
+- **DFS (Depth-First Search - `algoritmos/dfs.py`):**
+  - **Qué hace:** Explora un camino tan profundo como sea posible antes de retroceder (*backtracking*).
+  - **Consulta real en SaborBot:** *"Explorar la cadena completa de conexiones culinarias en profundidad a partir de una receta base"*.
+  - **Ventaja:** Excelente para recorrer toda la componente conexa y analizar la traza profunda de relaciones.
+
+### Análisis de Complejidad
+Ambos algoritmos operan con una complejidad temporal de **$O(V + E)$** (donde $V$ es el número de recetas y $E$ la cantidad de conexiones por ingredientes compartidos), ya que cada vértice y arista es visitado a lo más una vez utilizando estructuras auxiliares eficientes (colas para BFS y pilas/recursión para DFS).
+
+**Pruebas Unitarias:** `tests/test_recorridos.py` valida la correcta obtención de distancias por niveles (BFS) y la visita completa de la red (DFS).
+
+---
+
+## 12. Cómo Ejecutar el Proyecto
 
 ### Desde el Editor (VS Code / IDE)
 1. Abrir el proyecto en tu editor de código.
@@ -275,12 +303,12 @@ python -m unittest discover -s tests -v         # todas las pruebas unitarias
 
 ---
 
-## 12. Modelo de Usuario (`modelos/usuario.py`)
+## 13. Modelo de Usuario (`modelos/usuario.py`)
 
 Para gestionar perfiles y preparar la integración con los algoritmos de recomendación en las siguientes entregas, se implementó el modelo `Usuario` con encapsulamiento estricto y soporte para conjuntos de ingredientes. Contempla la gestión de nombre, email, conjunto de ingredientes disponibles, categorías favoritas e historial de navegación.
 
 ---
 
-## 13. Licencia y Uso
+## 14. Licencia y Uso
 
 Proyecto desarrollado con fines académicos para la materia **Estructuras de Datos** (Universidad Nacional Guillermo Brown).
