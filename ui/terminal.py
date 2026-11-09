@@ -116,6 +116,48 @@ def _opcion_explorar_categorias(arbol_n):
     print("=" * 50)
     input("\nPresiona [Enter] para continuar...")
 
+def _opcion_recomendar_grafos(recetas):
+    """TP7: Recomendaciones por ingredientes compartidos usando Grafos."""
+    print("\n" + "=" * 50)
+    print("  RECOMENDADOR DE RECETAS SIMILARES (GRAFOS)")
+    print("=" * 50)
+    
+    busqueda = input("Ingresá el nombre de una receta para buscar similares: ").strip().lower()
+    encontradas = [r for r in recetas if busqueda in r.nombre.lower()]
+    
+    if not encontradas:
+        print("\n No se encontró ninguna receta con ese nombre.")
+        return
+        
+    print("\nRecetas encontradas:")
+    for idx, r in enumerate(encontradas, 1):
+        print(f"{idx}. {r.nombre} ({r.categoria})")
+        
+    sel = input("\nElegí el número de la receta base: ").strip()
+    if not sel.isdigit() or not (1 <= int(sel) <= len(encontradas)):
+        print("\n Selección no válida.")
+        return
+        
+    receta_base = encontradas[int(sel) - 1]
+    
+    print("\n Construyendo red de recetas por ingredientes...")
+    from servicios.recomendador_grafos import construir_grafo_recetas, recomendar_similares
+    grafo = construir_grafo_recetas(recetas)
+    
+    similares = recomendar_similares(receta_base, grafo, top_n=5)
+    
+    print("\n" + "=" * 50)
+    print(f" SIMILARES A: {receta_base.nombre.upper()}")
+    print("=" * 50)
+    if not similares:
+        print(" No se encontraron recetas con ingredientes en común.")
+    else:
+        print(f" {'Receta':<25} | {'Afinidad (Ingredientes compartidos)'}")
+        print("-" * 50)
+        for idx, (rec, peso) in enumerate(similares, 1):
+            print(f" {idx}. {rec.nombre:<23} | 🔗 {peso} en común")
+    print("=" * 50)
+
 
 # --- Menú interactivo mediante Dispatch Table ---
 def ejecutar_terminal(recetas):
@@ -143,6 +185,7 @@ def ejecutar_terminal(recetas):
         "6": lambda: _opcion_listar_arbol(recetas, arbol_bst),
         "7": lambda: _opcion_explorar_categorias(arbol_n),
         "8": lambda: _opcion_top_n(recetas),
+        "9": lambda: _opcion_recomendar_grafos(recetas)
     }
 
     while True:
@@ -155,6 +198,7 @@ def ejecutar_terminal(recetas):
         print("6. Listar alfabéticamente (Árbol BST) ")
         print("7. Explorar categorías jerárquicamente (Árbol N-ario) ")
         print("8. Ver Top-N de recetas (Heap) ")
+        print("9. Recomendar recetas similares (Grafo) ")
         print("0. Salir")
 
         opc = input("\nOpción: ").strip()

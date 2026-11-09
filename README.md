@@ -39,7 +39,7 @@ Muchas personas saben qué ingredientes tienen en casa o disfrutan de una receta
 | **TP4** | Balanceo de Árboles (AVL) | 🟢 Completado |
 | **TP5** | Árboles Generales (N-arios) y Jerarquía de Categorías | 🟢 Completado |
 | **TP6** | Heap y Colas de Prioridad (Ranking Top-N) | 🟢 Completado |
-| **TP7** | Grafos y Relaciones por Ingredientes | 🔴 Pendiente |
+| **TP7** | Grafos y Relaciones por Ingredientes | 🟢 Completado |
 | **TP8** | Recorridos de Grafos (BFS / DFS) | 🔴 Pendiente |
 | **TP9** | Caminos Mínimos | 🔴 Pendiente |
 | **TP10** | Integración y Demo Day | 🔴 Pendiente |
@@ -72,21 +72,23 @@ SaborBot/
 │   ├── arbol.py            # Árbol Binario de Búsqueda (ABB) — TP3
 │   ├── arbol_avl.py        # Árbol AVL Auto-balanceado — TP4
 │   ├── arbol_n_ario.py     # Árbol General (N-ario) de Categorías — TP5
-│   ├── grafo.py            # Grafo para relaciones entre recetas
+│   ├── grafo.py            # Grafo No Dirigido y Pesado (Lista de Adyacencia) — TP7
 │   └── heap.py             # Heap binaria (Max/Min) implementada a mano — TP6
 ├── modelos/                # Modelos de dominio (POO)
 │   ├── receta.py           # Clase Receta
 │   └── usuario.py          # Clase Usuario
 ├── servicios/              # Lógica de negocio y motor de recomendaciones
 │   ├── ranking.py          # Función de prioridad y Top-N con heap — TP6
-│   └── recomendador.py
+│   └── recomendador_grafos.py # Motor de recomendaciones por ingredientes — TP7
 ├── telegram/               # Integración con Bot de Telegram
 │   └── bot.py
 ├── tests/                  # Pruebas unitarias
 │   ├── test_arbol.py       # Tests del ArbolBST (TP3)
 │   ├── test_avl.py         # Tests del ArbolAVL (TP4)
 │   ├── test_arbol_n_ario.py # Tests del Árbol N-ario (TP5)
-│   └── test_heap.py        # Tests del Heap y del ranking (TP6)
+│   ├── test_heap.py        # Tests del Heap y del ranking (TP6)
+│   └── test_grafo.py       # Tests del Grafo y recomendaciones (TP7)
+
 ├── ui/                     # Interfaz de usuario
 │   └── terminal.py         # Menú interactivo CLI con Dispatch Table
 ├── experimento.py          # Script de benchmarking (TP2)
@@ -228,7 +230,29 @@ Más detalle en [`docs/07_heap_ranking.md`](docs/07_heap_ranking.md).
 
 ---
 
-## 10. Cómo Ejecutar el Proyecto
+## 10. Grafos y Recomendaciones por Ingredientes (TP7)
+
+En el **TP7** incorporamos un **Grafo No Dirigido y Pesado** (`estructuras/grafo.py`) utilizando una **lista de adyacencia** para modelar la red de interconexiones entre las distintas recetas del sistema.
+
+### Diseño y Justificación del Grafo
+- **Vértices ($V$):** Cada nodo representa un objeto **Receta** completo de la base de datos.
+- **Aristas ($E$):** Dos recetas están conectadas si **comparten al menos un ingrediente** en común.
+- **Peso de la arista:** Representa la **cantidad exacta de ingredientes compartidos** entre ambas recetas. Esto permite ponderar la afinidad culinaria.
+- **Tipo de grafo:** **No dirigido** (la relación de ingredientes compartidos es simétrica) y **Pesado**.
+- **Representación (Lista de adyacencia):** Elegimos un diccionario de diccionarios en Python (`dict[Receta, dict[Receta, int]]`) porque el dominio de SaborBot es un grafo **disperso** (las recetas solo se relacionan con un subconjunto acotado de otras). Esto optimiza drásticamente el uso de memoria $O(V + E)$ en comparación con una matriz de adyacencia estática $O(V^2)$.
+
+### Funcionalidad y Servicio (`servicios/recomendador_grafos.py`)
+Se implementó un motor de recomendación que:
+1. Construye dinámicamente el grafo cruzando los conjuntos de ingredientes normalizados de todas las recetas.
+2. Dada una receta elegida por el usuario, consulta sus vecinos en el grafo y los ordena de mayor a menor afinidad según el peso de la arista (cantidad de ingredientes en común).
+3. **Integración CLI:** Accesible desde el menú interactivo bajo la **Opción 9 — Recomendar recetas similares (Grafo)** (`ui/terminal.py`).
+
+**Pruebas Unitarias:** `tests/test_grafo.py` valida la correcta creación de vértices, aristas con pesos, la recuperación de vecinos y las recomendaciones de recetas similares.
+
+---
+
+
+## 11. Cómo Ejecutar el Proyecto
 
 ### Desde el Editor (VS Code / IDE)
 1. Abrir el proyecto en tu editor de código.
@@ -251,12 +275,12 @@ python -m unittest discover -s tests -v         # todas las pruebas unitarias
 
 ---
 
-## 11. Modelo de Usuario (`modelos/usuario.py`)
+## 12. Modelo de Usuario (`modelos/usuario.py`)
 
 Para gestionar perfiles y preparar la integración con los algoritmos de recomendación en las siguientes entregas, se implementó el modelo `Usuario` con encapsulamiento estricto y soporte para conjuntos de ingredientes. Contempla la gestión de nombre, email, conjunto de ingredientes disponibles, categorías favoritas e historial de navegación.
 
 ---
 
-## 12. Licencia y Uso
+## 13. Licencia y Uso
 
 Proyecto desarrollado con fines académicos para la materia **Estructuras de Datos** (Universidad Nacional Guillermo Brown).
