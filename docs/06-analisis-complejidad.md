@@ -1,4 +1,4 @@
-# Informe de Análisis de Complejidad y Benchmarking (TP2)
+# Informe de Análisis de Complejidad y Benchmarking
 
 ---
 

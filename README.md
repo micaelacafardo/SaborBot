@@ -41,7 +41,6 @@ Muchas personas saben qué ingredientes tienen en casa o disfrutan de una receta
 | **TP6** | Heap y Colas de Prioridad (Ranking Top-N) | 🟢 Completado |
 | **TP7** | Grafos y Relaciones por Ingredientes | 🟢 Completado |
 | **TP8** | Recorridos de Grafos (BFS / DFS) | 🟢 Completado |
-| **TP9** | Caminos Mínimos | 🔴 Pendiente |
 | **TP10** | Integración y Demo Day | 🔴 Pendiente |
 
 ---
@@ -85,8 +84,6 @@ SaborBot/
 │   ├── recomendador_grafos.py # Motor de recomendaciones por ingredientes — TP7
 │   └── recorridos_grafos.py   # Servicio de consultas BFS y DFS — TP8
 │   
-├── telegram/               # Integración con Bot de Telegram
-│   └── bot.py
 │   
 ├── tests/                  # Pruebas unitarias
 │   ├── test_arbol.py       # Tests del ArbolBST (TP3)
