@@ -1,15 +1,18 @@
-# Diagrama de Clases UML — SaborBot (TP1)
+# Diagrama de Clases UML Completo — SaborBot
 
-## Notación UML Aplicada
-- **Visibilidad:** `+` público, `-` privado (`_adyacencias` en Python).
-- **Relaciones UML:**
-  - **Dependencia (`..>`):** un módulo/servicio invoca o construye a otro sin mantenerlo como atributo permanente (por ejemplo, servicios que reciben un `Grafo` o usan `bfs` / `dfs`).
-  - **Asociación (`-->`):** relación estructural entre clases (por ejemplo, `Grafo` relaciona vértices `Receta` y pesos de conexión).
+## Arquitectura por Capas
+El sistema se divide en cinco capas desacopladas:
+1. **Modelos (`modelos/`):** entidades del dominio (`Receta`, `Usuario`).
+2. **Estructuras de Datos (`estructuras/`):** implementaciones propias sin librerías externas (`ArbolBST`, `ArbolAVL`, `ArbolNario`, `Heap`, `Grafo`).
+3. **Algoritmos (`algoritmos/`):** búsquedas y recorridos sobre grafos (`bfs`, `dfs`).
+4. **Servicios (`servicios/`):** casos de uso de negocio (ranking Top-N, recomendaciones por similitud y exploración BFS/DFS).
+5. **Interfaz (`ui/`):** controlador de consola (`TerminalUI` en `ui/terminal.py`) con *dispatch table*.
 
 ```mermaid
 classDiagram
     direction TB
 
+    %% --- CAPA DE MODELOS ---
     class Receta {
         +str nombre
         +str categoria
@@ -24,6 +27,38 @@ classDiagram
         +list~str~ preferencias
     }
 
+    %% --- CAPA DE ESTRUCTURAS DE DATOS ---
+    class ArbolBST {
+        -NodoBST _raiz
+        +insertar(clave: str, receta: Receta) None
+        +buscar(clave: str) Receta
+        +inorden() list~Receta~
+    }
+
+    class ArbolAVL {
+        -NodoAVL _raiz
+        +insertar(clave: str, receta: Receta) None
+        +buscar(clave: str) Receta
+        -rotar_izquierda(nodo) NodoAVL
+        -rotar_derecha(nodo) NodoAVL
+    }
+
+    class ArbolNario {
+        -NodoNario _raiz
+        +insertar_categoria(padre: str, categoria: str) None
+        +agregar_receta(categoria: str, receta: Receta) None
+        +listar_jerarquia() list
+    }
+
+    class Heap {
+        -list _datos
+        -bool _es_max
+        +insertar(prioridad: float, item: Receta) None
+        +extraer() tuple
+        +esta_vacio() bool
+        +__len__() int
+    }
+
     class Grafo {
         -dict _adyacencias
         +agregar_vertice(vertice: Receta) None
@@ -34,18 +69,53 @@ classDiagram
         +__len__() int
     }
 
+    %% --- CAPA DE SERVICIOS Y ALGORITMOS ---
+    class ServicioRanking {
+        +calcular_puntaje(receta: Receta) float
+        +obtener_top_n(recetas: list~Receta~, n: int, categoria: str) list
+    }
+
     class RecomendadorGrafos {
         +construir_grafo_recetas(recetas: list~Receta~) Grafo
-        +recomendar_similares(receta_objetivo: Receta, grafo: Grafo, top_n: int) list
+        +recomendar_similares(receta: Receta, grafo: Grafo, top_n: int) list
     }
 
     class RecorridosGrafos {
-        +explorar_cercanas_bfs(receta_inicio: Receta, grafo: Grafo, nivel_max: int) dict
-        +explorar_cadena_dfs(receta_inicio: Receta, grafo: Grafo) list
+        +explorar_cercanas_bfs(receta: Receta, grafo: Grafo, nivel_max: int) dict
+        +explorar_cadena_dfs(receta: Receta, grafo: Grafo) list
     }
 
-    Grafo "1" --> "*" Receta : vertices / aristas ponderadas
+    class AlgoritmosGrafos {
+        <<module>>
+        +bfs(grafo: Grafo, inicio: Receta) tuple
+        +dfs(grafo: Grafo, inicio: Receta) list
+    }
+
+    %% --- CAPA DE INTERFAZ ---
+    class TerminalUI {
+        -list~Receta~ _recetas
+        -Grafo _grafo
+        -dict _opciones
+        +ejecutar() None
+        +mostrar_menu() None
+    }
+
+    %% --- RELACIONES ---
+    TerminalUI --> Receta : gestiona catálogo
+    TerminalUI ..> ArbolBST : consulta
+    TerminalUI ..> ArbolAVL : consulta
+    TerminalUI ..> ArbolNario : explora categorías
+    TerminalUI ..> ServicioRanking : solicita Top-N
+    TerminalUI ..> RecomendadorGrafos : solicita similares
+    TerminalUI ..> RecorridosGrafos : ejecuta BFS/DFS
+
+    ArbolBST "1" --> "*" Receta : indexa
+    ArbolAVL "1" --> "*" Receta : indexa balanceado
+    ArbolNario "1" --> "*" Receta : agrupa por categoría
+    Grafo "1" --> "*" Receta : vértices y aristas
+
+    ServicioRanking ..> Heap : usa para Top-N
+    ServicioRanking ..> Receta : evalúa
     RecomendadorGrafos ..> Grafo : construye y consulta
-    RecomendadorGrafos ..> Receta : recomienda
-    RecorridosGrafos ..> Grafo : aplica BFS y DFS
-    RecorridosGrafos ..> Receta : explora
+    RecorridosGrafos ..> Grafo : recorre
+    RecorridosGrafos ..> AlgoritmosGrafos : invoca bfs / dfs
