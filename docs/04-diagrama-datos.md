@@ -1,35 +1,40 @@
-# Diagrama de Datos — SaborBot 
-
-## 1. Origen de los Datos (`datos/recetas.json`)
-El sistema carga las recetas desde `datos/recetas.json` a través de `datos/cargador.py`. Cada registro aporta:
-- **Atributos descriptivos:** `nombre`, `categoria`, `dificultad`.
-- **Métrica de calidad:** `valoracion`.
-- **Lista de ingredientes:** colección de textos que luego se normalizan (minúsculas, sin espacios extra) para comparar afinidad culinaria.
-
-## 2. Estructuras en Memoria y Relaciones
-- **Colección base (`list[Receta]`):** mantiene todas las recetas cargadas para listados, filtros y construcción de estructuras.
-- **Estructuras arbóreas y heap:** organizan las recetas o sus claves/prioridades según la operación (`ArbolBST`, `ArbolAVL`, `ArbolNario`, `Heap`).
-- **Grafo en memoria (`dict[Receta, dict[Receta, int]]`):**
-  - Cada **vértice** es un objeto `Receta`.
-  - Cada **arista no dirigida** vincula dos recetas que comparten al menos un ingrediente normalizado.
-  - El **peso** (`int`) indica cuántos ingredientes tienen en común.
-
-## 3. Diagrama Entidad-Relación (Mermaid)
-
-```mermaid
 erDiagram
+    CATALOGO_JSON {
+        string archivo "datos/recetas.json (22 recetas)"
+        list recetas "coleccion inicial cargada al iniciar"
+    }
+
     RECETA {
-        string nombre
+        string nombre PK
         string categoria
         string dificultad
         float valoracion
     }
+
     INGREDIENTE {
-        string nombre_normalizado
-    }
-    CONEXION_RECETA {
-        int peso_ingredientes_compartidos
+        string nombre PK
     }
 
-    RECETA ||--|{ INGREDIENTE : contiene
-    RECETA ||--o{ CONEXION_RECETA : conecta_con
+    RECETA_INGREDIENTE {
+        string receta_nombre FK
+        string ingrediente_nombre FK
+    }
+
+    CONEXION_GRAFO {
+        string receta_origen FK
+        string receta_destino FK
+        int peso "cantidad de ingredientes compartidos"
+    }
+
+    USUARIO {
+        string nombre
+        list preferencias
+    }
+
+    CATALOGO_JSON ||--o{ RECETA : "carga (O(N))"
+    RECETA ||--o{ RECETA_INGREDIENTE : "contiene"
+    INGREDIENTE ||--o{ RECETA_INGREDIENTE : "aparece en"
+    RECETA ||--o{ CONEXION_GRAFO : "es origen / destino"
+    USUARIO }o--o{ INGREDIENTE : "preferencias (no integrado en CLI)"
+
+    
