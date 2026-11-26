@@ -1,7 +1,7 @@
 erDiagram
     CATALOGO_JSON {
-        string archivo "datos/recetas.json (22 recetas)"
-        list recetas "coleccion inicial cargada al iniciar"
+        string archivo
+        int total_recetas
     }
 
     RECETA {
@@ -9,6 +9,7 @@ erDiagram
         string categoria
         string dificultad
         float valoracion
+        int tiempo_min
     }
 
     INGREDIENTE {
@@ -23,18 +24,18 @@ erDiagram
     CONEXION_GRAFO {
         string receta_origen FK
         string receta_destino FK
-        int peso "cantidad de ingredientes compartidos"
+        int peso
     }
 
     USUARIO {
         string nombre
-        list preferencias
+        string preferencias
     }
 
-    CATALOGO_JSON ||--o{ RECETA : "carga (O(N))"
-    RECETA ||--o{ RECETA_INGREDIENTE : "contiene"
-    INGREDIENTE ||--o{ RECETA_INGREDIENTE : "aparece en"
-    RECETA ||--o{ CONEXION_GRAFO : "es origen / destino"
-    USUARIO }o--o{ INGREDIENTE : "preferencias (no integrado en CLI)"
+    CATALOGO_JSON ||--o{ RECETA : carga
+    RECETA ||--o{ RECETA_INGREDIENTE : contiene
+    INGREDIENTE ||--o{ RECETA_INGREDIENTE : aparece_en
+    RECETA ||--o{ CONEXION_GRAFO : conecta
+    USUARIO }o--o{ INGREDIENTE : prefiere
 
     
